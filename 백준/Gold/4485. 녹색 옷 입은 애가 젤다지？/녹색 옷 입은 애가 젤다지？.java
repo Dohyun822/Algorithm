@@ -77,6 +77,9 @@ public class Main {
 					if (distance[nr][nc] > current.weight + map[nr][nc]) {
 						distance[nr][nc] = current.weight + map[nr][nc];
 						pq.offer(new Temp(nr, nc, distance[nr][nc]));
+						if (nr == N - 1 && nc == N - 1) {
+							return distance[N - 1][N - 1];
+						}
 					}
 				}
 			}
