@@ -57,13 +57,13 @@ public class Main {
 		answer = new int[N + 1];
 		for (int i = 1; i <= N; i++) {
 			Arrays.fill(distance, INF);
-			distance[i] = 0;
-			goX(i);
+			distance[i] = 0; // 출발 거리 0으로
+			goX(i); // 집에서 X까지의 최단거리
 		}
 
 		Arrays.fill(distance, INF);
 		distance[X] = 0;
-		goHome();
+		goHome(); // X에서 집까지의 최단거리
 
 		int res = 0;
 		for (int x : answer) {
