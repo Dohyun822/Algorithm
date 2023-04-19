@@ -23,14 +23,22 @@ public class Main {
 
 	}
 
+	private static final int INF = 99999999;
+
 	private static int N;
 	private static int M;
 	private static int X;
-	private static ArrayList<Node> node[];
+	private static ArrayList<Node>[] list;
+	private static ArrayList<Node>[] reverseList;
+	private static int answer;
+	private static int A;
+	private static int B;
+	private static int W;
 	private static int[] distance;
-	private static int[] answer;
+	private static int[] reverseDis;
+
 	private static PriorityQueue<Node> pq;
-	private static final int INF = 99999999;
+	private static PriorityQueue<Node> reversepq;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -41,68 +49,68 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		X = Integer.parseInt(st.nextToken());
 
-		node = new ArrayList[N + 1];
-		for (int i = 1; i < N + 1; i++) {
-			node[i] = new ArrayList<Node>();
-		}
+		list = new ArrayList[N + 1];
+		reverseList = new ArrayList[N + 1];
 
-		distance = new int[N + 1];
+		for (int i = 1; i <= N; i++) {
+			list[i] = new ArrayList<Node>();
+			reverseList[i] = new ArrayList<Node>();
+		}
 
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
-			node[Integer.parseInt(st.nextToken())]
-					.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+			A = Integer.parseInt(st.nextToken());
+			B = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+
+			list[A].add(new Node(B, W));
+			reverseList[B].add(new Node(A, W));
 		}
 
-		answer = new int[N + 1];
+		answer = 0;
+
+		solve();
+
 		for (int i = 1; i <= N; i++) {
-			Arrays.fill(distance, INF);
-			distance[i] = 0; // 출발 거리 0으로
-			goX(i); // 집에서 X까지의 최단거리
+			answer = distance[i] + reverseDis[i] > answer ? distance[i] + reverseDis[i] : answer;
 		}
+		System.out.println(answer);
 
+	}
+
+	private static void solve() {
+		distance = new int[N + 1];
+		reverseDis = new int[N + 1];
 		Arrays.fill(distance, INF);
-		distance[X] = 0;
-		goHome(); // X에서 집까지의 최단거리
+		Arrays.fill(reverseDis, INF);
 
-		int res = 0;
-		for (int x : answer) {
-			res = res < x ? x : res;
-		}
-		System.out.println(res);
-
-	} // end of main
-
-	private static void goHome() {
 		pq = new PriorityQueue<Node>();
+		reversepq = new PriorityQueue<Node>();
 		pq.offer(new Node(X, 0));
+		reversepq.offer(new Node(X, 0));
+		distance[X] = 0;
+		reverseDis[X] = 0;
+
 		while (!pq.isEmpty()) {
 			Node cur = pq.poll();
-			for (Node temp : node[cur.vertex]) {
-				if (distance[temp.vertex] > cur.weight + temp.weight) {
-					distance[temp.vertex] = cur.weight + temp.weight;
+			for (Node temp : list[cur.vertex]) {
+				if (distance[temp.vertex] > temp.weight + cur.weight) {
+					distance[temp.vertex] = temp.weight + cur.weight;
 					pq.offer(new Node(temp.vertex, distance[temp.vertex]));
 				}
+
 			}
 		}
-		for (int i = 1; i <= N; i++) {
-			answer[i] += distance[i];
-		}
 
-	}
-
-	private static void goX(int i) {
-		pq = new PriorityQueue<Node>();
-		pq.offer(new Node(i, 0));
-		while (!pq.isEmpty()) {
-			Node cur = pq.poll();
-			for (Node temp : node[cur.vertex]) {
-				if (distance[temp.vertex] > cur.weight + temp.weight) {
-					distance[temp.vertex] = cur.weight + temp.weight;
-					pq.offer(new Node(temp.vertex, distance[temp.vertex]));
+		while (!reversepq.isEmpty()) {
+			Node cur = reversepq.poll();
+			for (Node temp : reverseList[cur.vertex]) {
+				if (reverseDis[temp.vertex] > temp.weight + cur.weight) {
+					reverseDis[temp.vertex] = temp.weight + cur.weight;
+					reversepq.offer(new Node(temp.vertex, reverseDis[temp.vertex]));
 				}
+
 			}
 		}
-		answer[i] += distance[X];
 	}
-}// end of class
+}
