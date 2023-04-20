@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,9 +43,10 @@ public class Main {
 	private static long max;
 	private static PriorityQueue<Node> pq;
 	private static StringTokenizer st;
+	private static BufferedReader br;
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		br = new BufferedReader(new InputStreamReader(System.in));
 		st = new StringTokenizer(br.readLine(), " ");
 
 		N = Integer.parseInt(st.nextToken());
@@ -61,34 +63,22 @@ public class Main {
 			U = Integer.parseInt(st.nextToken());
 			V = Integer.parseInt(st.nextToken());
 			C = Integer.parseInt(st.nextToken());
-
 			list[V].add(new Node(U, C));
 		}
 
-		distance = new long[N + 1];
-		Arrays.fill(distance, INF);
-		st = new StringTokenizer(br.readLine(), " ");
-
 		solve();
-
-		idx = 0;
-		max = 0;
-
-		for (int i = 1; i <= N; i++) {
-			if (distance[i] > max) {
-				max = distance[i];
-				idx = i;
-			}
-		}
-		System.out.println(idx);
-		System.out.println(max);
 
 	}// end of main
 
-	private static void solve() {
+	private static void solve() throws IOException {
+		distance = new long[N + 1];
+		Arrays.fill(distance, INF);
+		st = new StringTokenizer(br.readLine(), " ");
+		idx = 0;
+		max = 0;
+
 		pq = new PriorityQueue<Node>();
 		for (int k = 0; k < K; k++) {
-
 			int i = Integer.parseInt(st.nextToken());
 			pq.offer(new Node(i, 0));
 			distance[i] = 0;
@@ -100,12 +90,19 @@ public class Main {
 				continue;
 			}
 			for (Node temp : list[cur.vertex]) {
-
 				if (distance[temp.vertex] > cur.distance + temp.distance) {
 					distance[temp.vertex] = cur.distance + temp.distance;
 					pq.offer(new Node(temp.vertex, distance[temp.vertex]));
 				}
 			}
 		}
+		for (int i = 1; i <= N; i++) {
+			if (distance[i] > max) {
+				max = distance[i];
+				idx = i;
+			}
+		}
+		System.out.println(idx);
+		System.out.println(max);
 	}
 }// end of class
