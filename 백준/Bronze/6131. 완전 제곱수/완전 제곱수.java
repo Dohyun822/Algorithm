@@ -20,10 +20,10 @@ public class Main {
 		answer = 0;
 
 		for (int i = 1; i <= 500; i++) {
-			if (i * i + N <= 250000) {
-				double temp = Math.sqrt(i * i + N);
-				if ((int) temp * temp == i * i + N)
-					answer++;
+			int temp = i * i + N;
+			double sq = Math.sqrt(i * i + N);
+			if ((int) sq * sq == temp && i * i + N <= 250000) {
+				answer++;
 			}
 		}
 		System.out.println(answer);
