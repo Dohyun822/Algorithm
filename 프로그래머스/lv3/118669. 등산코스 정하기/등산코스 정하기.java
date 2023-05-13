@@ -1,94 +1,44 @@
-import java.util.*;
-
 public class Solution {
-    public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-        int maxIntensity = 10000001;
-        int[][] dp = new int[n+1][3];
-        List<List<int[]>> realPath = new ArrayList<>();
-        Set<Integer> checkGates = new HashSet<>();
-        Set<Integer> checkSummits = new HashSet<>();
-        
-        // Initialize dp and realPath
-        for (int i = 0; i <= n; i++) {
-            dp[i] = new int[]{maxIntensity, 0, 0};
-            realPath.add(new ArrayList<>());
-        }
-        
-        // Convert gates and summits to set for quick access
-        for (int gate : gates) {
-            checkGates.add(gate);
-        }
-        for (int summit : summits) {
-            checkSummits.add(summit);
-        }
-        
-        // Construct the realPath
-        for (int[] path : paths) {
-            realPath.get(path[0]).add(new int[]{path[2], path[1]});
-            realPath.get(path[1]).add(new int[]{path[2], path[0]});
-        }
-        
-        // Using PriorityQueue in place of heapq in Python
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
-        
-        for (int summit : summits) {
-            dp[summit] = new int[]{0, summit, summit};
-            pq.offer(new int[]{0, summit, summit});
-        }
-        
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            int curIntensity = cur[0];
-            int curSummit = cur[1];
-            int curPlace = cur[2];
-            
-            if (checkGates.contains(curPlace)) {
-                continue;
-            }
-            
-            int nxtSummit = curSummit;
-            
-            if (dp[curPlace][0] != curIntensity) {
-                continue;
-            }
-            if (dp[curPlace][1] != curSummit) {
-                continue;
-            }
-            
-            for (int[] nxt : realPath.get(curPlace)) {
-                int nxtIntensity = nxt[0];
-                int nxtPlace = nxt[1];
-                
-                if (checkSummits.contains(nxtPlace)) {
-                    continue;
-                }
-                int updateIntensity = Math.max(curIntensity, nxtIntensity);
-                if (dp[nxtPlace][0] < updateIntensity) {
-                    continue;
-                } else if (dp[nxtPlace][0] == updateIntensity && dp[nxtPlace][1] <= curSummit) {
-                    continue;
-                } else {
-                    dp[nxtPlace][0] = updateIntensity;
-                    dp[nxtPlace][1] = curSummit;
-                }
-                pq.offer(new int[]{updateIntensity, nxtSummit, nxtPlace});
+    public String solution(int n, int m, int x, int y, int r, int c, int k) {
+        int[][] dp = new int[n+1][m+1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                dp[i][j] = Math.abs(r - i) + Math.abs(c - j);
             }
         }
-        
-        int answerIntensity = maxIntensity;
-        int answerMountain = n+1;
-        
-        for (int gate : gates) {
-            if (dp[gate][0] < answerIntensity) {
-                answerIntensity = dp[gate][0];
-                answerMountain = dp[gate][1];
-            } else if (dp[gate][0] == answerIntensity) {
-                if (dp[gate][1] < answerMountain) {
-                    answerMountain = dp[gate][1];
-                }
-            }
+
+        if (dp[x][y] > k || dp[x][y] % 2 != k % 2) {
+            return "impossible";
         }
-        
-        return new int[]{answerMountain, answerIntensity};
+
+        int nr = x, nc = y, nk = k;
+        StringBuilder answer = new StringBuilder();
+
+        while (nk > 0) {
+            int[] result = go(nr, nc, nk, dp, n, m);
+            nr = result[0];
+            nc = result[1];
+            nk = result[2];
+            answer.append((char)result[3]);
+        }
+
+        return answer.toString();
+    }
+
+    private int[] go(int nr, int nc, int nk, int[][] dp, int n, int m) {
+        if (nr+1 <= n && dp[nr+1][nc] <= nk-1) {
+            return new int[] {nr+1, nc, nk-1, 'd'};
+        }
+        if (nc-1 >= 1 && dp[nr][nc-1] <= nk-1) {
+            return new int[] {nr, nc-1, nk-1, 'l'};
+        }
+        if (nc+1 <= m && dp[nr][nc+1] <= nk-1) {
+            return new int[] {nr, nc+1, nk-1, 'r'};
+        }
+        if (nr-1 >= 1 && dp[nr-1][nc] <= nk-1) {
+            return new int[] {nr-1, nc, nk-1, 'u'};
+        }
+        return null;
     }
 }
