@@ -1,56 +1,46 @@
-public class Solution {
-    public String solution(int m, int n, int y, int x, int c, int r, int k) {
-        int width = r - x, height = c - y;
-        int distance = Math.abs(width) + Math.abs(height);
-        int count = 0, left = 0, right = 0, down = 0, up = 0;
-        int[] current = {x, y};
-        StringBuilder answer = new StringBuilder();
+//승일이가 dp로 풀었길래 따라해봄
 
-        if (distance > k || (distance & 1) != (k & 1)) {
+public class Solution {
+    public String solution(int n, int m, int x, int y, int r, int c, int k) {
+        int[][] dp = new int[n+1][m+1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                dp[i][j] = Math.abs(r - i) + Math.abs(c - j);
+            }
+        }
+
+        if (dp[x][y] > k || (k-dp[x][y]) % 2 == 1) {
             return "impossible";
         }
 
-        if (width < 0) left = -width;
-        else right = width;
-        if (height < 0) up = -height;
-        else down = height;
+        int nr = x, nc = y, nk = k;
+        StringBuilder answer = new StringBuilder();
 
-        if (distance < k && ((k - distance) >> 1) + y + down <= m) {
-            up += (k - distance) >> 1;
-            down += (k - distance) >> 1;
-        } else if (distance < k) {
-            up += m - (y + down);
-            down += m - (y + down);
-            int add_more = (k - (up + down + left + right)) >> 1;
-            left += add_more;
-            right += add_more;
+        while (nk > 0) {
+            int[] result = go(nr, nc, nk, dp, n, m);
+            nr = result[0];
+            nc = result[1];
+            nk = result[2];
+            answer.append((char)result[3]);
         }
 
-        while (count < k)
-            if (down > 0 && current[1] < m) {
-                answer.append('d');
-                current[1]++;
-                down--;
-                count++;
-            } else if (left > 0 && current[0] > 1) {
-                answer.append('l');
-                current[0]--;
-                left--;
-                count++;
-            } else if (right > 0 && current[0] < n) {
-                answer.append('r');
-                current[0]++;
-                right--;
-                count++;
-            } else if (up > 0 && current[1] > 1) {
-                answer.append('u');
-                current[1]--;
-                up--;
-                count++;
-            } else {
-                return "impossible";
-            }
-        
         return answer.toString();
+    }
+
+    private int[] go(int nr, int nc, int nk, int[][] dp, int n, int m) {
+        if (nr+1 <= n && dp[nr+1][nc] <= nk-1) {
+            return new int[] {nr+1, nc, nk-1, 'd'};
+        }
+        if (nc-1 >= 1 && dp[nr][nc-1] <= nk-1) {
+            return new int[] {nr, nc-1, nk-1, 'l'};
+        }
+        if (nc+1 <= m && dp[nr][nc+1] <= nk-1) {
+            return new int[] {nr, nc+1, nk-1, 'r'};
+        }
+        if (nr-1 >= 1 && dp[nr-1][nc] <= nk-1) {
+            return new int[] {nr-1, nc, nk-1, 'u'};
+        }
+        return null;
     }
 }
