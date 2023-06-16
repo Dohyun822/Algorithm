@@ -1,35 +1,32 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static long A;
-	private static long B;
+    private static long start;
+    private static long end;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		A = Long.parseLong(st.nextToken());
-		B = Long.parseLong(st.nextToken());
+        start = Long.parseLong(st.nextToken());
+        end = Long.parseLong(st.nextToken());
 
-		System.out.println(f(B) - f(A - 1));
-	}// end of main
+        // 'f(end) - f(start - 1)'를 통해 start부터 end까지 각 숫자를 2로 나눌 수 있는 횟수의 합을 구한다.
+        System.out.println(computeSum(end) - computeSum(start - 1));
+    }
 
-	private static long f(long num) {
-		long answer = num;
-		long i = 2;
-		while (i <= num) {
-			answer += (num / i) * (i / 2);
-			i *= 2;
-		}
-		return answer;
+    private static long computeSum(long num) {
+        long totalSum = num; // 최종 합계를 저장할 변수. num이 주어진 숫자 자체를 포함하므로 초기화는 num으로 한다.
+        long divisor = 2; // 나눗셈에 사용될 숫자. 2, 4, 8, 16, ... 순서로 증가한다.
 
-	}
-}// end of class
+        while (divisor <= num) {
+            totalSum += (num / divisor) * (divisor / 2);
+            divisor *= 2;
+        }
+        
+        return totalSum;
+    }
+}
