@@ -1,38 +1,40 @@
-import java.io.*;
-import java.util.*;
-import java.util.stream.Stream;
-import java.math.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		int A = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine()," ");
-		int cnt = 0;
-		for(int a = 0; a<A; a++ ) {
-			int x = Integer.parseInt(st.nextToken());
+	private static int N;
 
-			if(x==1) {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+
+		N = Integer.parseInt(br.readLine());
+
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		int answer = 0;
+
+		while (st.hasMoreTokens()) {
+			int x = Integer.parseInt(st.nextToken());
+			if (x == 1) {
 				continue;
 			}
-			int yak = 0;
-			for(int i = 1; i<x;i++) {
-
-				if(x%i==0) {
-					yak++;
+			boolean chk = true;
+			for (int i = 2; i <= Math.sqrt(x); i++) {
+				if (x % i == 0) {
+					chk = false;
+					break;
 				}
-
 			}
-			if(yak == 1) {
-				cnt++;
+			if (chk) {
+				answer++;
 			}
-
 		}
-		System.out.println(cnt);
 
-	}
+		System.out.println(answer);
 
-}
+	} // end of main
+}// end of class
