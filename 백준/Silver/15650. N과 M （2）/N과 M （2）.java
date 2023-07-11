@@ -1,33 +1,45 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int N;
-	static int M;
-	static int[] numbers;
-	static StringBuilder sb = new StringBuilder();
+	private static int N;
+	private static int M;
+	private static int[] selected;
+	private static StringBuilder sb;
+	private static boolean[] visited;
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		M = sc.nextInt();
-		numbers = new int[M];
-		solve(0, 1);
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		sb = new StringBuilder();
+
+		st = new StringTokenizer(br.readLine(), " ");
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		selected = new int[M];
+		visited = new boolean[N + 1];
+
+		recur(0, 1);
+
 		System.out.println(sb.toString());
 
-	}// end of main
+	}
 
-	public static void solve(int cnt, int start) {
-		if (cnt == M) {
-			for (int i : numbers) {
-				sb.append(i + " ");
+	private static void recur(int cur, int start) {
+		if (cur == M) {
+			for (int i : selected) {
+				sb.append(i).append(" ");
 			}
 			sb.append("\n");
 			return;
 		}
+
 		for (int i = start; i <= N; i++) {
-			numbers[cnt] = i;
-			solve(cnt + 1, i + 1);
+			selected[cur] = i;
+			recur(cur + 1, i + 1);
 		}
 	}
-}// end of class
+}
