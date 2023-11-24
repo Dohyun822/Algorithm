@@ -3,6 +3,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,7 +13,7 @@ public class Main {
 	private static int[] arr;
 	private static int[] selected;
 	private static StringBuilder sb;
-	private static ArrayList<int[]> temp;
+	private static HashSet<String> hash;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,8 +33,7 @@ public class Main {
 		}
 
 		Arrays.sort(arr);
-
-		temp = new ArrayList<int[]>();
+		hash = new HashSet<String>();
 
 		solve(0, 0, 0);
 
@@ -42,19 +43,15 @@ public class Main {
 
 	private static void solve(int start, int cnt, int flag) {
 		if (cnt == M) {
-			int[] result = new int[M];
-			for (int i = 0; i < M; i++) {
-				int num = selected[i];
-				result[i] = num;
+			StringBuilder sb2 = new StringBuilder();
+			for (int i : selected) {
+				sb2.append(i).append(" ");
 			}
-			if (check(result)) {
-				temp.add(result);
-				for (int i : selected) {
-					sb.append(i).append(" ");
-				}
-				sb.append('\n');
+			sb2.append('\n');
+			if (!hash.add(sb2.toString())) {
+				return;
 			}
-
+			sb.append(sb2.toString());
 			return;
 		}
 		for (int i = start; i < N; i++) {
@@ -64,15 +61,5 @@ public class Main {
 
 			solve(start, cnt + 1, flag | 1 << i);
 		}
-	}
-
-	private static boolean check(int[] arr) {
-		for (int i = 0; i < temp.size(); i++) {
-			int[] chkArr = temp.get(i);
-			if (Arrays.equals(chkArr, arr)) {
-				return false;
-			}
-		}
-		return true;
 	}
 }
