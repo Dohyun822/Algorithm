@@ -18,7 +18,7 @@ public class Main {
 			return a % c;
 		}
 
-		long val = solve(a, b / 2, c) % c;
+		long val = solve(a, b / 2, c);
 
 		val = val * val % c;
 
