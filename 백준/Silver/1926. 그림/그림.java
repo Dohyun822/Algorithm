@@ -2,15 +2,17 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int n, m;
-	static int[] dr = { -1, 1, 0, 0 };
-	static int[] dc = { 0, 0, -1, 1 };
-	static int[][] map;
-	static boolean[][] visited;
-	static int count;
-	static int area;
+	private static int[][] map;
+	private static boolean[][] visited;
+	private static int count;
+	private static int area;
 
-	public static void main(String[] args) throws IOException {
+	private static int[] dr = { 1, -1, 0, 0 };
+	private static int[] dc = { 0, 0, -1, 1 };
+	private static int n;
+	private static int m;
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
@@ -19,8 +21,6 @@ public class Main {
 
 		map = new int[n][m];
 		visited = new boolean[n][m];
-		count = 0;
-		area = 0;
 
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
@@ -29,10 +29,12 @@ public class Main {
 			}
 		}
 
+		count = 0;
+		area = 0;
+
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				visited[i][j] = true;
-				if (map[i][j] == 1) {
+				if (map[i][j] == 1 && visited[i][j] == false) {
 					solve(i, j);
 					count++;
 				}
@@ -45,29 +47,29 @@ public class Main {
 	}
 
 	private static void solve(int i, int j) {
-		Queue<Integer> qr = new ArrayDeque<Integer>();
-		Queue<Integer> qc = new ArrayDeque<Integer>();
+		Queue<int[]> q = new ArrayDeque<int[]>();
 
-		qr.offer(i);
-		qc.offer(j);
-		map[i][j] = 0;
-		int countArea = 1;
-		while (!qr.isEmpty()) {
-			int r = qr.poll();
-			int c = qc.poll();
-			for (int k = 0; k < dc.length; k++) {
+		q.offer(new int[] { i, j });
+		visited[i][j] = true;
+
+		int maxArea = 1;
+
+		while (!q.isEmpty()) {
+			int[] point = q.poll();
+			int r = point[0];
+			int c = point[1];
+
+			for (int k = 0; k < dr.length; k++) {
 				int nr = r + dr[k];
 				int nc = c + dc[k];
 				if (nr >= 0 && nr < n && nc >= 0 && nc < m && !visited[nr][nc] && map[nr][nc] == 1) {
-					qr.offer(nr);
-					qc.offer(nc);
-					map[nr][nc] = 0;
+					q.offer(new int[] { nr, nc });
 					visited[nr][nc] = true;
-					countArea++;
+					maxArea++;
 				}
 			}
-
 		}
-		area = area > countArea ? area : countArea;
+
+		area = Math.max(area, maxArea);
 	}
 }
