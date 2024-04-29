@@ -1,28 +1,30 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	private static int N;
-	private static int M;
-	private static int K;
-
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
 
-		for (int i = 0; i < K; i++) {
-			if (N / 2 >= M) {
-				N--;
-			} else {
-				M--;
+		int answer = 0;
+
+		for (int i = 0; i <= K; i++) {
+			int team = 0;
+			int woman = N - i;
+			int man = M - K + i;
+			for (int j = 1; j <= man; j++) {
+				if (woman - 2 >= 0) {
+					team++;
+					woman -= 2;
+				}
 			}
+			answer = Math.max(answer, team);
 		}
 
-		System.out.println(Math.min(N / 2, M));
-	}// end of main
-}// end of class
+		System.out.println(answer);
+	}
+}
