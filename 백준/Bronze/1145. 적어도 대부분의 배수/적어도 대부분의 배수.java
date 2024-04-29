@@ -1,45 +1,38 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	private static int[] arr;
-	private static int cnt;
-	private static int answer;
-
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-		arr = new int[5];
+		int A = Integer.parseInt(st.nextToken());
+		int B = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		int D = Integer.parseInt(st.nextToken());
+		int E = Integer.parseInt(st.nextToken());
 
-		for (int i = 0; i < 5; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-
-		answer = 1;
-
-		while (true) {
-			cnt = 0;
-			for (int i = 0; i < 5; i++) {
-				if (answer % arr[i] == 0) {
-					cnt++;
-				}
+		for (int i = 1; i < Integer.MAX_VALUE; i++) {
+			int chk = 0;
+			if (i % A == 0) {
+				chk++;
 			}
-			if (cnt >= 3) {
-				break;
+			if (i % B == 0) {
+				chk++;
 			}
-			answer++;
+			if (i % C == 0) {
+				chk++;
+			}
+			if (i % D == 0) {
+				chk++;
+			}
+			if (i % E == 0) {
+				chk++;
+			}
+			if (chk >= 3) {
+				System.out.println(i);
+				return;
+			}
 		}
-		System.out.println(answer);
-
-	}// end of main
-}// end of class
+	}
+}
