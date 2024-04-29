@@ -22,10 +22,8 @@ public class Main {
 
 		for (int num = 123; num <= 987; num++) {
 			String s = Integer.toString(num);
-			if (s.charAt(0) == s.charAt(1) || s.charAt(1) == s.charAt(2) || s.charAt(2) == s.charAt(0)) {
-				continue;
-			}
-			if (s.contains("0")) {
+			if (s.charAt(0) == s.charAt(1) || s.charAt(1) == s.charAt(2) || s.charAt(2) == s.charAt(0)
+					|| s.contains("0")) {
 				continue;
 			}
 
