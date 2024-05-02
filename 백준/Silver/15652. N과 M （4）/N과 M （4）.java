@@ -1,46 +1,45 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+	private static int[] selected;
 	private static int N;
 	private static int M;
-	private static int[] arr;
-	private static int[] selected;
 	private static StringBuilder sb;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		sb = new StringBuilder();
 
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 
 		selected = new int[M];
 
-		solve(1, 0, 0);
+		recur(1, 0);
 
 		System.out.println(sb.toString());
 
 	}
 
-	private static void solve(int start, int cnt, int flag) {
-		if (cnt == M) {
-			for (int i : selected) {
-				sb.append(i).append(" ");
-			}
-			sb.append('\n');
+	private static void recur(int start, int depth) {
+		if (depth == M) {
+			print();
 			return;
 		}
-		for (int i = start; i <= N; i++) {
-//			if ((flag & 1 << i) != 0)
-//				continue;
-			selected[cnt] = i;
 
-			solve(i, cnt + 1, flag | 1 << i);
+		for (int i = start; i <= N; i++) {
+			selected[depth] = i;
+			recur(i, depth + 1);
 		}
+	}
+
+	private static void print() {
+		for (int i = 0; i < M; i++) {
+			sb.append(selected[i]).append(" ");
+		}
+		sb.append('\n');
+
 	}
 }
