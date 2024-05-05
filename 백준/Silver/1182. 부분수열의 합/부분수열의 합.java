@@ -1,6 +1,5 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 	private static int N;
@@ -8,41 +7,37 @@ public class Main {
 	private static int[] arr;
 	private static int answer;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		StringBuilder sb = new StringBuilder();
-
-		st = new StringTokenizer(br.readLine(), " ");
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
 		N = Integer.parseInt(st.nextToken());
 		S = Integer.parseInt(st.nextToken());
 
 		arr = new int[N];
-		st = new StringTokenizer(br.readLine(), " ");
 
+		st = new StringTokenizer(br.readLine(), " ");
 		for (int i = 0; i < N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
 		answer = 0;
-		recur(0, 0);
-		if (S == 0 && answer > 0) {
-			answer--;
+
+		for (int i = 0; i < N; i++) {
+			recur(i, arr[i], 1);
 		}
 
 		System.out.println(answer);
-
 	}
 
-	private static void recur(int cur, int total) {
-		if (cur == N) {
-			if (total == S) {
-				answer++;
-			}
-			return;
+	private static void recur(int index, int sum, int count) {
+		if (sum == S && count > 0) {
+			answer++;
 		}
-		recur(cur + 1, total + arr[cur]);
-		recur(cur + 1, total);
+
+		for (int i = index + 1; i < N; i++) {
+			recur(i, sum + arr[i], count + 1);
+		}
 	}
+
 }
