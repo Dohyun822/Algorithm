@@ -1,34 +1,35 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, K;
-    static int[][] dp;
-    static int[] W, V;
-    
+    private static int N;
+    private static int K;
+    private static int[][] arr;
+    private static int[][] dp;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        dp = new int[N + 1][K + 1];
-        W = new int[N + 1];
-        V = new int[N + 1];
+        arr = new int[N][2];
 
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            W[i] = Integer.parseInt(st.nextToken());
-            V[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            arr[i][0] = Integer.parseInt(st.nextToken());
+            arr[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= K; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (j - W[i] >= 0) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - W[i]] + V[i]);
+        dp = new int[N + 1][K + 1];
+
+        for (int i = 0; i < N; i++) {
+            for (int w = 0; w <= K; w++) {
+                if (w - arr[i][0] >= 0) {
+                    dp[i + 1][w] = Math.max(dp[i][w], dp[i][w - arr[i][0]] + arr[i][1]);
+                } else {
+                    dp[i + 1][w] = dp[i][w];
                 }
             }
         }
