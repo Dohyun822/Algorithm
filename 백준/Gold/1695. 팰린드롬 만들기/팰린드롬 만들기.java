@@ -9,7 +9,7 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		arr = new int[N];
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
 		for (int i = 0; i < N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
@@ -20,10 +20,10 @@ public class Main {
 			Arrays.fill(row, -1);
 		}
 
-		System.out.println(minInsertions(0, N - 1));
+		System.out.println(recur(0, N - 1));
 	}
 
-	private static int minInsertions(int left, int right) {
+	private static int recur(int left, int right) {
 		if (left >= right) {
 			return 0;
 		}
@@ -33,9 +33,9 @@ public class Main {
 		}
 
 		if (arr[left] == arr[right]) {
-			dp[left][right] = minInsertions(left + 1, right - 1);
+			dp[left][right] = recur(left + 1, right - 1);
 		} else {
-			dp[left][right] = Math.min(minInsertions(left + 1, right), minInsertions(left, right - 1)) + 1;
+			dp[left][right] = Math.min(recur(left + 1, right), recur(left, right - 1)) + 1;
 		}
 
 		return dp[left][right];
