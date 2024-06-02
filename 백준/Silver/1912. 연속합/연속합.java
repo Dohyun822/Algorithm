@@ -2,32 +2,31 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static int n;
-	private static int[] prefix_Maxsum;
-
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
 
-		n = Integer.parseInt(br.readLine());
-
-		prefix_Maxsum = new int[n + 1];
+		int N = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-		prefix_Maxsum[1] = Integer.parseInt(st.nextToken());
-
-		int answer = prefix_Maxsum[1];
-
-		for (int i = 2; i <= n; i++) {
-			int next = Integer.parseInt(st.nextToken());
-			prefix_Maxsum[i] = Math.max(next, prefix_Maxsum[i - 1] + next);
-
-			if (prefix_Maxsum[i] > answer) {
-				answer = prefix_Maxsum[i];
-			}
+		int[] arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
-		System.out.println(answer);
+		int[] prefixSum = new int[N + 1];
 
+		for (int i = 1; i <= N; i++) {
+			prefixSum[i] = prefixSum[i - 1] + arr[i - 1];
+		}
+
+		int maxSum = Integer.MIN_VALUE;
+		int minPrefixSum = prefixSum[0];
+
+		for (int i = 1; i <= N; i++) {
+			maxSum = Math.max(maxSum, prefixSum[i] - minPrefixSum);
+			minPrefixSum = Math.min(minPrefixSum, prefixSum[i]);
+		}
+
+		System.out.println(maxSum);
 	}
 }
