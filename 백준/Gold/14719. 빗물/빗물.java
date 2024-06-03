@@ -2,49 +2,40 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-	private static int H;
-	private static int W;
-	private static int[] block;
-	private static int[] leftMax;
-	private static int[] rightMax;
-	private static int answer;
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-		H = Integer.parseInt(st.nextToken());
-		W = Integer.parseInt(st.nextToken());
 
+		int h = Integer.parseInt(st.nextToken());
+		int w = Integer.parseInt(st.nextToken());
+
+		int[] a = new int[w];
 		st = new StringTokenizer(br.readLine(), " ");
-
-		block = new int[W];
-		for (int i = 0; i < W; i++) {
-			block[i] = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < w; i++) {
+			a[i] = Integer.parseInt(st.nextToken());
 		}
 
-		leftMax = new int[W];
-		rightMax = new int[W];
+		int[] left = new int[w];
+		int[] right = new int[w];
 
-		leftMax[0] = block[0];
-		// 현재 위치에서의 왼쪽 최대 높이
-		for (int i = 1; i < W; i++) {
-			leftMax[i] = Math.max(leftMax[i - 1], block[i]);
-		}
-		rightMax[W - 1] = block[W - 1];
-		// 현재위치에서 오른쪽 최대 높이
-		for (int i = W - 2; i >= 0; i--) {
-			rightMax[i] = Math.max(rightMax[i + 1], block[i]);
+		left[0] = a[0];
+		for (int i = 1; i < w; i++) {
+			left[i] = Math.max(left[i - 1], a[i]);
 		}
 
-		answer = 0;
+		right[w - 1] = a[w - 1];
+		for (int i = w - 2; i >= 0; i--) {
+			right[i] = Math.max(right[i + 1], a[i]);
+		}
 
-		for (int i = 0; i < W; i++) {
-			answer += Math.min(leftMax[i], rightMax[i]) - block[i];
-
+		int answer = 0;
+		for (int i = 0; i < w; i++) {
+			int hight = Math.min(left[i], right[i]) - a[i];
+			if (hight > 0) {
+				answer += hight;
+			}
 		}
 
 		System.out.println(answer);
-	}// end of main
-}// end of class
+	}
+}
