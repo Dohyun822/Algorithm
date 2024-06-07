@@ -2,44 +2,40 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static int n;
-	private static int[] arr;
-	private static int x;
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		n = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine());
 
-		arr = new int[n];
-
+		int[] arr = new int[n];
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
 		for (int i = 0; i < n; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
+
+		int x = Integer.parseInt(br.readLine());
+
 		Arrays.sort(arr);
 
-		x = Integer.parseInt(br.readLine());
+		int s = 0;
+		int e = n - 1;
+		int count = 0;
 
-		int start = 0;
-		int end = n - 1;
+		while (s < e) {
+			int sum = arr[s] + arr[e];
 
-		int answer = 0;
-
-		while (start < end) {
-			if (arr[start] + arr[end] == x) {
-				answer++;
-				start++;
-				end--;
-			} else if (arr[start] + arr[end] < x) {
-				start++;
+			if (sum == x) {
+				count++;
+				s++;
+				e--;
+			} else if (sum < x) {
+				s++;
 			} else {
-				end--;
+				e--;
 			}
 		}
 
-		System.out.println(answer);
-
+		System.out.println(count);
 	}
 }
