@@ -1,22 +1,23 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int seconds = 0;
-        int K = 1;
-
-        while (N > 0) {
-            if (N < K) {
-                K = 1;
+        long n = Long.parseLong(br.readLine());
+        
+        long k = 1;
+        long time = 0;
+        
+        while (n > 0) {
+            if (n < k) {
+                k = 1;
             }
-            N -= K;
-            K++;
-            seconds++;
+            n -= k;
+            k++;
+            time++;
         }
-        System.out.println(seconds);
+        
+        System.out.println(time);
     }
 }
