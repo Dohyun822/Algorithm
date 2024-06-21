@@ -1,37 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	static ArrayList<Long> stones = new ArrayList<>();
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		StringBuilder sb = new StringBuilder();
-
 		long k = Long.parseLong(br.readLine());
 
-		find(k);
+		List<Long> stones = factorize(k);
 
-		sb.append(stones.size()).append("\n");
-		for (Long stone : stones)
-			sb.append(stone).append(" ");
-		System.out.println(sb.toString());
+		// 결과 출력
+		System.out.println(stones.size());
+		for (long stone : stones) {
+			System.out.print(stone + " ");
+		}
+	}
 
-	} // end of main
-
-	static void find(long k) {
-		for (long i = 2; i * i <= k; i++) {
-			while (k % i == 0) {
+	private static List<Long> factorize(long n) {
+		List<Long> stones = new ArrayList<>();
+		for (long i = 2; i * i <= n; i++) {
+			while (n % i == 0) {
 				stones.add(i);
-				k /= i;
+				n /= i;
 			}
 		}
-		if (k > 1)
-			stones.add(k);
+		if (n > 1) {
+			stones.add(n);
+		}
+		Collections.sort(stones);
+		return stones;
 	}
-}// end of class
+}
