@@ -2,15 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static int a;
-	private static int d;
+	private static long a;
+	private static long d;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-		a = Integer.parseInt(st.nextToken());
-		d = Integer.parseInt(st.nextToken());
+		a = Long.parseLong(st.nextToken());
+		d = Long.parseLong(st.nextToken());
 
 		int q = Integer.parseInt(br.readLine());
 
@@ -19,8 +19,8 @@ public class Main {
 			st = new StringTokenizer(br.readLine(), " ");
 
 			int type = Integer.parseInt(st.nextToken());
-			int l = Integer.parseInt(st.nextToken());
-			int r = Integer.parseInt(st.nextToken());
+			long l = Long.parseLong(st.nextToken());
+			long r = Long.parseLong(st.nextToken());
 
 			if (type == 1) {
 				sb.append(sum(l, r)).append("\n");
@@ -31,31 +31,31 @@ public class Main {
 		System.out.print(sb.toString());
 	}
 
-	private static long sum(int l, int r) {
-		int n = r - l + 1;
+	private static long sum(long l, long r) {
+		long n = r - l + 1;
 		long first = a + (l - 1) * d;
 		long last = a + (r - 1) * d;
 		return n * (first + last) / 2;
 	}
 
-	private static int solve(int l, int r) {
+	private static long solve(long l, long r) {
 		if (l == r) {
 			return a + (l - 1) * d;
 		}
 		if (d == 0) {
 			return a;
 		} else {
-			int first = a + (l - 1) * d;
+			long first = a + (l - 1) * d;
 			return gcd(first, d);
 		}
 	}
 
-	private static int gcd(int x, int y) {
-		while (y != 0) {
-			int temp = y;
-			y = x % y;
-			x = temp;
+	private static long gcd(long first, long d2) {
+		while (d2 != 0) {
+			long temp = d2;
+			d2 = first % d2;
+			first = temp;
 		}
-		return x;
+		return first;
 	}
 }
