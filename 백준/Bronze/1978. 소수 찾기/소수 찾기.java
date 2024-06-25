@@ -1,40 +1,35 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	private static int N;
-
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
 
-		N = Integer.parseInt(br.readLine());
-
+		int N = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
 		int answer = 0;
 
-		while (st.hasMoreTokens()) {
-			int x = Integer.parseInt(st.nextToken());
-			if (x == 1) {
-				continue;
-			}
-			boolean chk = true;
-			for (int i = 2; i <= Math.sqrt(x); i++) {
-				if (x % i == 0) {
-					chk = false;
-					break;
+		boolean[] isPrime = new boolean[1001];
+		for (int i = 2; i <= 1000; i++) {
+			isPrime[i] = true;
+		}
+
+		for (int i = 2; i * i <= 1000; i++) {
+			if (isPrime[i]) {
+				for (int j = i * i; j <= 1000; j += i) {
+					isPrime[j] = false;
 				}
-			}
-			if (chk) {
-				answer++;
 			}
 		}
 
+		while (st.hasMoreTokens()) {
+			if (isPrime[Integer.parseInt(st.nextToken())]) {
+				answer++;
+			}
+		}
 		System.out.println(answer);
 
-	} // end of main
-}// end of class
+	}
+
+}
