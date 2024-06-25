@@ -1,42 +1,43 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	private static int C;
-	private static int N;
-	private static int[] answer;
+	private static int[] answer = new int[1001];
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
-		C = Integer.parseInt(br.readLine());
+		solve();
 
-		answer = new int[1001];
+		int C = Integer.parseInt(br.readLine());
+		for (int i = 0; i < C; i++) {
+			int N = Integer.parseInt(br.readLine());
+			sb.append(answer[N]).append("\n");
+		}
+
+		System.out.println(sb.toString());
+	}
+
+	private static void solve() {
 		answer[1] = 3;
-
-		for (int i = 2; i < 1001; i++) {
+		for (int i = 2; i <= 1000; i++) {
 			int cnt = 0;
 			for (int j = 1; j <= i; j++) {
-				int a = i;
-				int b = j;
-				while (a % b != 0) {
-					int temp = a % b;
-					a = b;
-					b = temp;
-				}
-				if (b == 1) {
+				if (gcd(i, j) == 1) {
 					cnt++;
 				}
 			}
 			answer[i] = answer[i - 1] + cnt * 2;
 		}
+	}
 
-		for (int i = 0; i < C; i++) {
-			N = Integer.parseInt(br.readLine());
-			sb.append(answer[N]).append("\n");
+	private static int gcd(int a, int b) {
+		while (b != 0) {
+			int temp = b;
+			b = a % b;
+			a = temp;
 		}
-		System.out.println(sb.toString());
-
+		return a;
 	}
 }
