@@ -1,80 +1,73 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 	private static int N;
-	private static int[][] map;
-	private static ArrayList<Integer> list;
 	private static boolean[][] visited;
+	private static int[][] map;
 
-	static int[] dr = { -1, 1, 0, 0 };
-	static int[] dc = { 0, 0, -1, 1 };
+	private static int[] dr = { 1, -1, 0, 0 };
+	private static int[] dc = { 0, 0, -1, 1 };
+	private static ArrayList<Integer> list;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		StringBuilder sb = new StringBuilder();
 
 		N = Integer.parseInt(br.readLine());
+
 		map = new int[N][N];
+		visited = new boolean[N][N];
+		list = new ArrayList<>();
+
 		for (int i = 0; i < N; i++) {
 			String s = br.readLine();
 			for (int j = 0; j < N; j++) {
-				map[i][j] = s.charAt(j) - '0';
+				map[i][j] = (s.charAt(j) - '0');
 			}
 		}
 
-		list = new ArrayList<Integer>();
-		visited = new boolean[N][N];
+		int cnt = 0;
 
-		solve();
-
-		Collections.sort(list);
-		sb.append(list.size()).append("\n");
-		for (Integer x : list) {
-			sb.append(x).append("\n");
-		}
-		System.out.println(sb.toString());
-
-	}// end of main
-
-	private static void solve() {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (!visited[i][j]) {
-					visited[i][j] = true;
-					if (map[i][j] == 1) {
-						dfs(i, j);
-					}
+				if (map[i][j] == 1 && !visited[i][j]) {
+					cnt++;
+					dfs(i, j);
 				}
 			}
 		}
+
+		System.out.println(cnt);
+
+		Collections.sort(list);
+
+		for (Integer x : list) {
+			System.out.println(x);
+		}
 	}
 
-	private static void dfs(int r, int c) {
-		Stack<Integer> stack = new Stack<Integer>();
-		stack.push(r);
-		stack.push(c);
+	private static void dfs(int i, int j) {
+		Stack<int[]> stack = new Stack<int[]>();
+		stack.push(new int[] { i, j });
+		visited[i][j] = true;
 
 		int cnt = 1;
 		while (!stack.isEmpty()) {
-			int curC = stack.pop();
-			int curR = stack.pop();
-			for (int i = 0; i < dr.length; i++) {
-				int nr = curR + dr[i];
-				int nc = curC + dc[i];
+			int[] cur = stack.pop();
+			int r = cur[0];
+			int c = cur[1];
+			for (int k = 0; k < dc.length; k++) {
+				int nr = r + dr[k];
+				int nc = c + dc[k];
 				if (nr >= 0 && nr < N && nc >= 0 && nc < N && !visited[nr][nc] && map[nr][nc] == 1) {
 					visited[nr][nc] = true;
-					stack.push(nr);
-					stack.push(nc);
+					stack.push(new int[] { nr, nc });
 					cnt++;
 				}
 			}
 		}
 		list.add(cnt);
+
 	}
-}// end of class
+
+}
