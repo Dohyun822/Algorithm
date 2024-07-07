@@ -2,14 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static int N;
 	private static int M;
+	private static int N;
 	private static int[][] map;
 	private static boolean[][] visited;
+	private static Queue<int[]> q;
 
-	private static int[] dr = { 1, -1, 0, 0 };
+	private static int[] dr = { -1, 1, 0, 0 };
 	private static int[] dc = { 0, 0, -1, 1 };
-	private static int answer;
+	private static int cnt;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,72 +22,49 @@ public class Main {
 		map = new int[N][M];
 		visited = new boolean[N][M];
 
-		boolean check = true;
+		q = new ArrayDeque<int[]>();
+
+		cnt = 0;
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			for (int j = 0; j < M; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
-				if (map[i][j] == 0) {
-					check = false;
+				int info = Integer.parseInt(st.nextToken());
+				map[i][j] = info;
+				if (info == 1) {
+					q.offer(new int[] { i, j });
+					visited[i][j] = true;
+				} else if (info == 0) {
+					cnt++;
 				}
 			}
 		}
 
-		if (check) {
-			System.out.println(0);
-			return;
-		}
-
-		answer = 0;
-
-		solve();
-
-		System.out.println(answer);
+		System.out.println(bfs());
 
 	}
 
-	private static void solve() {
-		Queue<int[]> q = new ArrayDeque<int[]>();
-
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (map[i][j] == 1) {
-					visited[i][j] = true;
-					q.offer(new int[] { i, j });
-				}
-			}
-		}
-
+	private static int bfs() {
+		int day = -1;
 		while (!q.isEmpty()) {
+			day++;
 			int size = q.size();
 			for (int i = 0; i < size; i++) {
-				int[] point = q.poll();
-				int r = point[0];
-				int c = point[1];
-				for (int j = 0; j < dr.length; j++) {
-					int nr = r + dr[j];
-					int nc = c + dc[j];
+				int[] cur = q.poll();
+				int r = cur[0];
+				int c = cur[1];
+				for (int k = 0; k < dr.length; k++) {
+					int nr = r + dr[k];
+					int nc = c + dc[k];
 					if (nr >= 0 && nr < N && nc >= 0 && nc < M && !visited[nr][nc] && map[nr][nc] == 0) {
-						map[nr][nc] = 1;
 						visited[nr][nc] = true;
 						q.offer(new int[] { nr, nc });
+						cnt--;
 					}
 				}
 			}
-			if (!q.isEmpty()) {
-				answer++;
-			}
 		}
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (map[i][j] == 0) {
-					answer = -1;
-					return;
-				}
-			}
-		}
-
+		return cnt == 0 ? day : -1;
 	}
 }
