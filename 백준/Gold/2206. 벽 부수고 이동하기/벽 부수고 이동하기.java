@@ -2,60 +2,75 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, M;
-    static int[][] map;
-    static boolean[][][] visited;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
+	private static int N;
+	private static int M;
+	private static int[][] map;
+	private static boolean[][][] visited;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+	private static int[] dr = { -1, 1, 0, 0 };
+	private static int[] dc = { 0, 0, -1, 1 };
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        map = new int[N][M];
-        visited = new boolean[N][M][2];
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < N; i++) {
-            String line = br.readLine();
-            for (int j = 0; j < M; j++) {
-                map[i][j] = line.charAt(j) - '0';
-            }
-        }
+		map = new int[N + 1][M + 1];
+		visited = new boolean[N + 1][M + 1][2];
 
-        System.out.println(bfs());
-    }
+		for (int i = 1; i <= N; i++) {
+			String s = br.readLine();
+			for (int j = 1; j <= M; j++) {
+				map[i][j] = s.charAt(j - 1) - '0';
+			}
+		}
 
-    public static int bfs() {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{0, 0, 0, 1});
-        visited[0][0][0] = true;
+		System.out.println(bfs());
 
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int x = current[0], y = current[1], wall = current[2], dist = current[3];
+	}
 
-            if (x == N - 1 && y == M - 1) return dist;
+	private static int bfs() {
+		Queue<int[]> q = new ArrayDeque<int[]>();
+		q.offer(new int[] { 1, 1, 0, 1 });
+		visited[1][1][0] = true;
 
-            for (int i = 0; i < 4; i++) {
-                int nx = x + dx[i], ny = y + dy[i];
+		while (!q.isEmpty()) {
+			int[] current = q.poll();
 
-                if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+			int r = current[0];
+			int c = current[1];
+			int wall = current[2];
+			int dist = current[3];
 
-                if (map[nx][ny] == 0 && !visited[nx][ny][wall]) {
-                    visited[nx][ny][wall] = true;
-                    queue.add(new int[]{nx, ny, wall, dist + 1});
-                }
+			if (r == N && c == M) {
+				return dist;
+			}
 
-                if (map[nx][ny] == 1 && wall == 0 && !visited[nx][ny][1]) {
-                    visited[nx][ny][1] = true;
-                    queue.add(new int[]{nx, ny, 1, dist + 1});
-                }
-            }
-        }
+			for (int i = 0; i < dr.length; i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
 
-        return -1;
-    }
+				if (nr < 1 || nr > N || nc < 1 || nc > M) {
+					continue;
+				}
+
+				if (map[nr][nc] == 0 && !visited[nr][nc][wall]) {
+					visited[nr][nc][wall] = true;
+					q.offer(new int[] { nr, nc, wall, dist + 1 });
+
+				}
+
+				if (map[nr][nc] == 1 && wall == 0 && !visited[nr][nc][1]) {
+					visited[nr][nc][1] = true;
+					q.offer(new int[] { nr, nc, 1, dist + 1 });
+
+				}
+
+			}
+
+		}
+		return -1;
+	}
 }
