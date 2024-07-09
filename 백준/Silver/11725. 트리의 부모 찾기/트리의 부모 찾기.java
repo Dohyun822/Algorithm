@@ -1,54 +1,47 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static ArrayList<Integer>[] graph;
-    static boolean[] visited;
-    static int[] parents;
+    private static int N;
+    private static ArrayList<Integer>[] graphs;
+    private static int[] parent;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] ars) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        
-        graph = new ArrayList[N+1];
-        for(int i=0; i<=N; i++){
-            graph[i] = new ArrayList<>();
+
+        N = Integer.parseInt(br.readLine());
+        graphs = new ArrayList[N + 1];
+
+        for (int i = 1; i <= N; i++) {
+            graphs[i] = new ArrayList<>();
         }
 
-        visited = new boolean[N+1];
-        parents = new int[N+1];
-
-        for(int i=0; i<N-1; i++) {
+        for (int i = 0; i < N - 1 ; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            int u = Integer.parseInt(st.nextToken());
-            int v = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken());
+            int t = Integer.parseInt(st.nextToken());
 
-            graph[u].add(v);
-            graph[v].add(u);
+            graphs[s].add(t);
+            graphs[t].add(s);
+
         }
 
-        bfs();
+        parent = new int[N + 1];
 
-        for(int i=2; i<=N; i++) {
-            System.out.println(parents[i]);
+        dfs(1, 0);
+
+        for (int i = 2; i <= N; i++) {
+            System.out.println(parent[i]);
         }
     }
 
-    public static void bfs() {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(1);
-        visited[1] = true;
-
-        while(!queue.isEmpty()) {
-            int current = queue.poll();
-
-            for(int next : graph[current]) {
-                if(!visited[next]) {
-                    parents[next] = current;
-                    visited[next] = true;
-                    queue.add(next);
-                }
+    private static void dfs(int cur, int prev) {
+        for (Integer i : graphs[cur]) {
+            if (i == prev) {
+                continue;
             }
+            parent[i] = cur;
+            dfs(i, cur);
         }
     }
 }
