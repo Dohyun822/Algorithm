@@ -10,7 +10,7 @@ WHERE
   YEAR(SALES_DATE) = 2022 
   AND MONTH(SALES_DATE) = 3
 
-UNION ALL
+UNION
 
 -- 2022년 3월의 오프라인 판매 데이터를 조회하고 USER_ID를 NULL로 설정
 SELECT 
