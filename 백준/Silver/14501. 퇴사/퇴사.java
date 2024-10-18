@@ -1,40 +1,44 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	private static int N;
-	private static int[][] list;
-	private static int answer;
+    private static int answer;
+    private static int N;
+    private static int[] T;
+    private static int[] P;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
 
-		list = new int[N][2];
+        T = new int[N + 1];
+        P = new int[N + 1];
 
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine(), " ");
-			list[i][0] = Integer.parseInt(st.nextToken());
-			list[i][1] = Integer.parseInt(st.nextToken());
-		}
+        for (int i = 1; i <= N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine()," ");
+            T[i] = Integer.parseInt(st.nextToken());
+            P[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        answer = -123123;
+        
+        recur(1,0);
 
-		answer = 0;
-		solve(0, 0);
-		System.out.println(answer);
-	}// end of main
+        System.out.println(answer);
+        
+    }
 
-	private static void solve(int day, int total) {
-		if (day > N) {
-			return;
-		}
-		if (day == N) {
-			answer = Math.max(answer, total);
-			return;
-		}
-		solve(day + list[day][0], total + list[day][1]);
-		solve(day + 1, total);
-	}
-}// end of class
+    private static void recur(int day, int money) {
+        if(day > N + 1){
+            return;
+        }
+        if(day == N + 1 ){
+            answer = Math.max(answer, money);
+            return;
+        }
+
+        recur(day + 1, money); //일 안함
+        recur(day + T[day], money + P[day]);
+    }
+}
