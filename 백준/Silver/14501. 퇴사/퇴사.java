@@ -6,6 +6,7 @@ public class Main {
     private static int N;
     private static int[] T;
     private static int[] P;
+    private static int[] dp;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,24 +22,28 @@ public class Main {
             P[i] = Integer.parseInt(st.nextToken());
         }
         
-        answer = -123123;
-        
-        recur(1,0);
 
-        System.out.println(answer);
+        dp = new int[N+1];
+        Arrays.fill(dp, -1);
         
+        System.out.println(recur(1));
+
     }
 
-    private static void recur(int day, int money) {
+    private static int recur(int day) {
         if(day > N + 1){
-            return;
+            return -123123123;
         }
         if(day == N + 1 ){
-            answer = Math.max(answer, money);
-            return;
+            return 0;
         }
 
-        recur(day + 1, money); //일 안함
-        recur(day + T[day], money + P[day]);
+        if(dp[day] != -1){
+            return dp[day];
+        }
+
+        dp[day] = Math.max(recur(day + 1), recur(day + T[day]) + P[day]);
+
+        return dp[day];
     }
 }
